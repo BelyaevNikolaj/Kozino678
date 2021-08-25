@@ -394,30 +394,20 @@ def getDice():
 
 # Hand Bandit==================================
 
-# Однорукий бандит...
-def oneHandBandit():
-    global money
-    playGame = True
-    while (playGame):
-        colorLine(3, 'ДОБРО ПОЖАЛОВАТЬ НА ИГРУ В ОДНОРУКОГО БАНДИТА!')
-        color(14)
-        print(f'\n У тебя на счету {money} {valuta}\n')
-        color(5)
-        print('Правила игры:')
-        print('     1. При совпвдении 2-х числе ставка не списывается.')
-        print('     2. При совпадении 3-х чисел выигрыш 2:1.')
-        print('     3. При совпадении 4-х чисел выигрыш 5:1.')
-        print('     4. При совадении 5-ти чисел выигрыш 10:1.')
-        print('     0. Ставка 0 для завершения игры\n')
-
-        stavka = getIntInput(0, money, f'     Введите ставку от 0 до {money}')
-        if (stavka == 0):
-            return 0
-        money -= stavka
-        money += getOHBRes(stavka)
-
-        if (money <= 0):
-            playGame = False
+# Анализ совкадения чисел в бандите
+def getMaxCount(digit, v1, v2, v3, v4, v5):
+    ret = 0
+    if (digit == v1):
+        ret += 1
+    if (digit == v2):
+        ret += 1
+    if (digit == v3):
+        ret += 1
+    if (digit == v4):
+        ret += 1 
+    if (digit == v5):
+        ret += 1
+    return ret
 
 # Анимация однорукого бандита.
 def getOHBRes(stavka):
@@ -427,6 +417,7 @@ def getOHBRes(stavka):
     d3 = 0
     d4 = 0
     d5 = 0
+    
     getD1 = True
     getD2 = True
     getD3 = True
@@ -482,26 +473,68 @@ def getOHBRes(stavka):
 
         # Строка со знаком %, оформление
         print('     ' + '%' * 10)
-        print('     {d1} {d2} {d3} {d4} {d5}')
+        print(f'     {d1} {d2} {d3} {d4} {d5}')
 
-    msxCount = getMaxCount(d1, d1, d2, d3, d4, d5)
+    maxCount = getMaxCount(d1, d1, d2, d3, d4, d5)
 
     if (maxCount < getMaxCount(d2, d1, d2, d3, d4, d5)):
-        maxCount = getMaxCount(d2, d1, d2, d3, d4, d5))
+        maxCount = getMaxCount(d2, d1, d2, d3, d4, d5)
     if (maxCount < getMaxCount(d3, d1, d2, d3, d4, d5)):
-        maxCount = getMaxCount(d3, d1, d2, d3, d4, d5))
+        maxCount = getMaxCount(d3, d1, d2, d3, d4, d5)
     if (maxCount < getMaxCount(d4, d1, d2, d3, d4, d5)):
-        maxCount = getMaxCount(d4, d1, d2, d3, d4, d5))
+        maxCount = getMaxCount(d4, d1, d2, d3, d4, d5)
     if (maxCount < getMaxCount(d5, d1, d2, d3, d4, d5)):
-        maxCount = getMaxCount(d5, d1, d2, d3, d4, d5))
-        
+        maxCount = getMaxCount(d5, d1, d2, d3, d4, d5)
+
+    color(14)
+    if (maxCount == 2):
+        print(f' Совпадение двух чисел! Твой выигрыш в размере ставки: {res}')
+    elif (maxCount == 3):
+        print(f' Совпадение трех чисел! Твой выигрыш 2:1 : {res}')
+    elif (maxCount == 4):
+        print(f' Совпадение ЧЕТЫРЕХ чисел! Твой выигрыш 5:1 : {res}')
+    elif (maxCount == 5):
+        print(f' БИНГО! Совпадение ВСЕХ чисел! Твой выигрыш 10:1 : {res}')
+    else:
+        proigr(res)
+        res = 0
+    color(11)
+    print()
+
+    return res
+
+# Однорукий бандит...
+def oneHandBandit():
+    global money
+    playGame = True
+    while (playGame):
+        colorLine(3, 'ДОБРО ПОЖАЛОВАТЬ НА ИГРУ В ОДНОРУКОГО БАНДИТА!')
+        color(14)
+        print(f'\n У тебя на счету {money} {valuta}\n')
+        color(5)
+        print('Правила игры:')
+        print('     1. При совпвдении 2-х числе ставка не списывается.')
+        print('     2. При совпадении 3-х чисел выигрыш 2:1.')
+        print('     3. При совпадении 4-х чисел выигрыш 5:1.')
+        print('     4. При совадении 5-ти чисел выигрыш 10:1.')
+        print('     0. Ставка 0 для завершения игры\n')
+
+        stavka = getIntInput(0, money, f'     Введите ставку от 0 до {money}')
+        if (stavka == 0):
+            return 0
+        money -= stavka
+        money += getOHBRes(stavka)
+
+        if (money <= 0):
+            playGame = False
+
+
         
         
     
 
 
-# Анализ совкадения чисел в бандите
-#def getMaxCount(digit, v1, v2, v3, v4, v5): 
+
 
 #=============================================================
 
